@@ -90,8 +90,10 @@ function adjust(button) {
         minutes++;
         updateScreenTime(value, minutes);  //FIX
     } else if (button.classList.contains('down')) {
-        minutes--;
-        updateScreenTime(value, minutes);
+        if (minutes > 0) {
+            minutes--;
+            updateScreenTime(value, minutes);
+        }
     }
 }
 
