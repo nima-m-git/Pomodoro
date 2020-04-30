@@ -1,72 +1,57 @@
 console.log('🍆');
 
-// const status = {
-//     currentMode: 'PAUSED', // PAUSED > RUNNING > BREAK
-//     sessionLength: 25,
-//     breakLength: 5,
-//     startTime: null,
-// };
-// const getTimeRemaining = () => foo;
-// const tick = foo => {
-//   1. if `startTime` is null, set it to be Date.now()
-//   2. get time remaining, if less than 0 switch to next mode
-//   3. update UI
-//   4. re-run `tick` until paused with `setTimeout(tick, 1000);`
-// };
-// const handleStartClick = () => {...}
-// const handleStopClick = () => {...}
-// const handlePauseClick = () => {...}
-// const handleRestartClick = () => {...}
-// const handleSessionLengthIncrement = () => {...}
-// const handleSessionLengthDecrement = () => {...}
-// const handleBreakLengthIncrement = () => {...}
-// const handleBreakLengthDecrement = () => {...}
+//          CONSTANTS           //
+const getCurrentTime = () => new Date();
+const leadZeros = (num) => String(num).padStart(2, '0');
 
 
 //          Screen Vars     //
-let desiredSessionLength = document.getElementById('session').querySelector('.value');
-updateScreenTime(desiredSessionLength, 25) // default
 
-let desiredBreakLength = document.getElementById('break').querySelector('.value');
-updateScreenTime(desiredBreakLength, 5); // default
+let status;
 
-let statusScreen = document.querySelector('.clock').querySelector('#status');
-statusScreen.textContent = 'Status: ' + 'Session'; // default, change on toggle
+let sessionLength = document.getElementById('session').querySelector('.value');
+let breakLength = document.getElementById('break').querySelector('.value');
+let statusScreen = document.querySelector('#status');
+let timeLeftScreen = document.querySelector('#time-left');
 
-let timeLeftScreen = document.querySelector('.clock').querySelector('#time-left');
+
+function setDefaultSettings() {
+    updateScreenTime(sessionLength, 25); 
+    updateScreenTime(breakLength, 5); 
+    timeLeftScreen.textContent = '';
+    status = 'Session';
+    updateStatusScreen();
+}
+
+function updateStatusScreen() {
+    statusScreen.textContent = 'Status: ' + status; // default, change on toggle
+}
 
 
 function updateScreenTime(screen, minutes, seconds=0) {
-    let formatted = formatTime(minutes, seconds);
-    minutes = formatted.minutes;
-    seconds = formatted.seconds;
-    screen.textContent = minutes + ':' + seconds;
+    formatted = formatTime(minutes, seconds);
+    screen.textContent = formatted.minutes + ':' + formatted.seconds;
 }
 
-function formatTime(minutes, seconds=0) {
 
-    while (seconds >= 60) {
-        minutes ++;
-        seconds -= 60;
-    }
-    minutes = (minutes > 9)? minutes : (minutes > 0)? ('0' + minutes) : '00';
-    seconds = (seconds > 9)? seconds : (seconds > 0)? ('0' + seconds) : '00';
+//          Time Calculations           //
+
+function formatTime(minutes, seconds=0) {
+    minutes = Math.floor(seconds/60) + minutes;
+    seconds = seconds%60;
 
     return {
-        minutes, 
-        seconds,
+        minutes: [leadZeros(minutes)],
+        seconds: [leadZeros(seconds)],
     };
 }
 
+// calculate every second and update timeLeftScreen after Start
+const timeLeft = (target) => Math.round((target - getCurrentTime())/1000); //units in milliseconds
 
-
-function timeLeft(target) {       // calculate this every second and update timeLeftScreen after Start
-    let currentTime = getCurrentTime(); //returns milliseconds
-    return Math.round((target - currentTime)/1000);
-}
 
 // calculates target time ie what time in the future to count down from
-function targetTime(addedTime) {  //desired time is time left, which originally is desiredSession
+function targetTime(addedTime) {  
     newTime = getCurrentTime();
 
     addMinutes = parseInt(addedTime.slice(0,2));
@@ -76,16 +61,6 @@ function targetTime(addedTime) {  //desired time is time left, which originally 
     newTime.setSeconds(newTime.getSeconds() + addSeconds);
 
     return newTime
-}
-
-
-// const startTime = new Date();
-// const targetTime = new Date(startTime.getTime() + amount * 60000);
-// if (targetTime > startTime) { doSomething() };
-
-
-function getCurrentTime() {
-    return new Date();
 }
 
 
@@ -120,31 +95,59 @@ function adjust(button) {
     }
 }
 
+
 //      Clock Functions         //
 
 let futureTarget;
+let timeout;
 
 function start() {
-    timeLeftScreen.textContent = desiredSessionLength.textContent;
+    timeLeftScreen.textContent = (timeLeftScreen.textContent)? timeLeftScreen.textContent : (status == 'Session') ? sessionLength.textContent : breakLength.textContent;
+    futureTarget = targetTime(timeLeftScreen.textContent); 
 
-    futureTarget = targetTime(timeLeftScreen.textContent); //calculated onStart, session length or timeleft
-
-    screenUpdateEverySecond();
+    timeout = setInterval(screenUpdateEverySecond, 1000);
 }
 
-function screenUpdateEverySecond(){
+function pause() {
+    clearInterval(timeout);
+}
+
+function stop() {
+    clearInterval(timeout);
+    timeLeftScreen.textContent = sessionLength.textContent;
+    status = 'Session';
+}
+
+function restart() {
+    clearInterval(timeout);
+    setDefaultSettings();
+}
+
+
+
+function screenUpdateEverySecond() {
     let timeCountdown = timeLeft(futureTarget);
     updateScreenTime(timeLeftScreen, minutes=0, seconds=timeCountdown);
 
-    let timeOut = setInterval(screenUpdateEverySecond, 1000);
+    checkTimeLeft(timeCountdown);
 }
 
-
+function checkTimeLeft(timeCountdown) {
+    if (timeCountdown < 1) {
+        pause();
+        toggleState();
+    };
+}
 
 function toggleState() {
+    clearInterval(timeout);
 
+    timeLeftScreen.textContent = '';
+    status = (status == 'Session')? 'Break' : 'Session';
+    updateStatusScreen();
+
+    start();
 }
 
-function onPause(){
-    //pause time left
-}
+
+setDefaultSettings();
