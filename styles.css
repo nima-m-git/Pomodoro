@@ -1,11 +1,41 @@
+@font-face {
+    font-family: 'circus';
+    src: url('static/the-circus-display-font-zip/ttf/TheCircous.ttf');
+}
+
+* {
+    font-family: 'circus';
+}
+
+header {
+    text-align: center;
+    color: rgba(114, 17, 0, 0.911);
+    font-size: 30px;
+}
+
+button {
+    background-color: maroon;
+    color: green;
+    border-color: rgba(92, 141, 2, 0.76);
+    font-size: 20px;
+    border-radius: 25px;
+}
+
+.clock-main button {
+    width: 50%;
+    margin: auto;
+}
+
 .clock {
     width: 500px;
     height: 500px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-evenly;
     margin: auto;
-    background-color: tomato;
+    background-color: rgb(252, 79, 49);
+    border-radius: 45% 45% 40% 40%;
+
 }
 
 /*          Time Options Section            */
@@ -15,12 +45,13 @@
 
 }
 
-
 #session, #break {
     display: grid;
     grid-template-areas: 
             'down head up'
             '. value .';
+    align-items: center;
+    justify-content: center;
 }
 
 .up {
@@ -37,14 +68,21 @@ h2 {
 
 .value {
     grid-area: value;
+    text-align: center;
+    font-size: 30px;
 }
 
 
+/*          Clock Main Selection         */
 .clock-main {
     display: grid;
     grid-template-areas: 
             'start status restart'
             'pause time stop';
+    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-rows: 1fr 2fr;
+    align-items: center;
+    justify-content: center;
 }
 
 .clock-main #start{
@@ -71,4 +109,5 @@ h2 {
 .clock-main #time-left {
     grid-area: time;
     margin: auto;
+    font-size: 70px;
 }
