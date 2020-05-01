@@ -4,43 +4,44 @@
 
 <head>
   <meta charset="utf-8" />
+
   <title>Pomodoro Clock 🍆</title>
+
+  <link rel='stylesheet' type='text/css' href='styles.css'>
   <script src="https://kit.fontawesome.com/ec4062e9de.js" crossorigin="anonymous"></script>
-
 </head>
-<body>
-
+<header>
     <h1>Pomadoro Clock</h1>
-
-    <div class='time options'>
-
-        <div id='session'>
-            <h2>Session: </h2>
-            <button class='adjust up'>Up</button>
-            <div class="value"><time>00:00</time></div>
-            <button class='adjust down'>Down</button>
-        </div>
-        <div id='break'>
-            <h2>Break: </h2>
-            <button class='adjust up'>Up</button>
-            <div class="value"><time>00:00</time></div>
-            <button class="adjust down">Down</button>
-        </div>
-    </div>
-
+</header>
+<body>
     <div class='clock'>
-        <br></br>   
-            <!-- delete linebreak after styling -->
-        <h2 id='status'></h2>
+ 
+          <div class='time-options'>
+            <div id='session'>             
+                <h2>Session: </h2>
+                <button class='adjust up'>Up</button>
+                <div class="value"><time>00:00</time></div>
+                <button class='adjust down'>Down</button>
+            </div>
+            <div id='break'>
+                <h2>Break: </h2>
+                <button class='adjust up'>Up</button>
+                <div class="value"><time>00:00</time></div>
+                <button class="adjust down">Down</button>
+            </div>
+        </div>
 
-        <h2 id='time-left'></h2>
+        <div class='clock-main'>
+            <h2 id='status'></h2>
 
-        <button id="start">Start</button>
-        <button id="stop">Stop</button>
-        <button id="pause">Pause</button>
-        <button id="restart">Restart</button>
+            <h2 id='time-left'></h2>
+
+            <button id="start">Start</button>
+            <button id="stop">Stop</button>
+            <button id="pause">Pause</button>
+            <button id="restart">Restart</button>
+        </div>
     </div>
-
 </body>
 
 <script src='script.js'></script>

@@ -76,7 +76,7 @@ function whichButton(){
 
     if (button.classList.contains('adjust')) {
         adjust(button);
-    } else if (button.parentNode.classList.contains('clock')) {
+    } else if (button.parentNode.classList.contains('clock-main')) {
         let clockFunc = button.getAttribute('id');
         window[clockFunc]();
     }

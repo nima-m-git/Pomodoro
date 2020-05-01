@@ -1,0 +1,74 @@
+.clock {
+    width: 500px;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: auto;
+    background-color: tomato;
+}
+
+/*          Time Options Section            */
+.time-options {
+    display: flex;
+    justify-content: space-around;
+
+}
+
+
+#session, #break {
+    display: grid;
+    grid-template-areas: 
+            'down head up'
+            '. value .';
+}
+
+.up {
+    grid-area: up;
+}
+
+h2 {
+    grid-area: head;
+}
+
+.down {
+    grid-area: down;
+}
+
+.value {
+    grid-area: value;
+}
+
+
+.clock-main {
+    display: grid;
+    grid-template-areas: 
+            'start status restart'
+            'pause time stop';
+}
+
+.clock-main #start{
+    grid-area: start;
+}
+
+.clock-main #pause {
+    grid-area: pause;
+}
+
+.clock-main #stop {
+    grid-area: stop;
+}
+
+.clock-main #restart {
+    grid-area: restart;
+}
+
+.clock-main #status {
+    grid-area: status;
+    margin: auto;
+}
+
+.clock-main #time-left {
+    grid-area: time;
+    margin: auto;
+}
